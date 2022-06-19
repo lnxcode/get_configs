@@ -1,0 +1,66 @@
+#!/bin/sh
+
+configsDir="/opt/get_configs/configs-auto"
+cd /opt/get_configs
+
+let i=2
+while [ $i -lt 255 ]
+do
+    ip="172.18.0.$i"
+    echo $ip
+    ./get_configs.expect $ip 172.18.0.1 ${configsDir} >> ./log/get_configs.log 2>>./log/get_configs_error.log
+    let i=$i+1
+done
+
+let i=2
+while [ $i -lt 255 ]
+do
+    ip="172.18.1.$i"
+    echo $ip
+    ./get_configs.expect $ip 172.18.1.1 ${configsDir} >> ./log/get_configs.log 2>>./log/get_configs_error.log
+    let i=$i+1
+done
+
+let i=2
+while [ $i -lt 255 ]
+do
+    ip="172.18.2.$i"
+    echo $ip
+    ./get_configs.expect $ip 172.18.2.1 ${configsDir} >> ./log/get_configs.log 2>>./log/get_configs_error.log
+    let i=$i+1
+done
+
+sleep 120
+chmod 600 $configsDir/*
+date=$(date +%Y-%m-%d)
+
+listConfigs=($(ls -1 ${configsDir}/*-new))
+sizeArray=${#listConfigs[@]}
+index=0
+
+while [ "$index" -lt "$sizeArray" ]
+do
+    filenameNew=${listConfigs[$index]}
+    if [ ! -s "${filenameNew}" ]
+    then
+        rm -f "${filenameNew}"
+        let index=$index+1
+        continue
+    fi
+    switchIP=$(echo $filenameNew | sed -n 's/.*\/\([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\).*/\1/p')
+    lastSwitchConfig=($(ls -1 ${configsDir}/$switchIP-*.conf | sort | tail -1 ))
+    if [ ! -z "$lastSwitchConfig" ]
+    then
+        md5sumLastConfig=$(md5sum $lastSwitchConfig | awk '{print $1}')
+        md5sumNewConfig=$(md5sum $filenameNew | awk '{print $1}')
+        if [ "$md5sumLastConfig" != "$md5sumNewConfig" ]
+        then
+            mv -f "${filenameNew}" "${configsDir}/${switchIP}-${date}.conf"
+        else
+            rm -f "${filenameNew}"
+        fi
+    else
+        mv -f "${filenameNew}" "${configsDir}/${switchIP}-${date}.conf"
+    fi
+    let index=$index+1
+done
