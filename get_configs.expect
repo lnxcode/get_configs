@@ -3,7 +3,7 @@
 if {$argc != 3} {
     send_error "\r\n Usage:   get_configs.expect switchIp serverIp configs_dir"
     send_error "\r\n Arguments without spaces        ^        ^   "
-    send_error "\r\n Example: update_firmware.expect 172.18.0.114 172.18.0.1 /opt/get_configs/configs-auto\r\n"
+    send_error "\r\n Example: get_configs.expect 172.18.0.114 172.18.0.1 /opt/get_configs/configs-auto\r\n"
     exit
 }
 
