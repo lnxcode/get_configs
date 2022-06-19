@@ -1,6 +1,4 @@
-get_configs is util for getting and saving configs from switches and routers different vendors (Cisco, D-link, Erricsson)
-
-File secrets.example need rename as secrets and edit it
+get_configs is util for getting and saving configs from switches and routers different vendors (Cisco, D-link, Erricsson, Edgecore)
 
 Configs saving in config-auto dir by tftp protocol
 
@@ -11,6 +9,11 @@ The code uses the language 'expect'
 get_configs runnig for whole networks 172.18.0.0/24, 172.18.1.0/24 and 172.18.2.0/24. You can modify get_configs for your own networks. 
 
 USE IT AS-IS WITHOUT ANY WARRANTY
+
+1. Rename file secrets.example as secrets and edit it
+2. Setup any TFTP-server. It must be accessible from network hardware. In get_configs TFTP-server has IPs 172.18.0.1, 172.18.1.1, 172.18.2.1. You can modify this script for your own IPs and networks.
+3. Create a folder configs-auto and give write permissions to the user running the script on this folder
+
 
 Usage:
 ./get_configs 
