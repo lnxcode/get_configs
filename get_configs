@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 configsDir="/opt/get_configs/configs-auto"
 cd /opt/get_configs
@@ -51,13 +51,12 @@ do
     lastSwitchConfig=($(ls -1 ${configsDir}/$switchIP-*.conf | sort | tail -1 ))
     if [ ! -z "$lastSwitchConfig" ]
     then
-        md5sumLastConfig=$(md5sum $lastSwitchConfig | awk '{print $1}')
-        md5sumNewConfig=$(md5sum $filenameNew | awk '{print $1}')
-        if [ "$md5sumLastConfig" != "$md5sumNewConfig" ]
+        different=$(diff <(cat "${lastSwitchConfig[0]}" | grep -v "ntp clock-period") <(cat "${filenameNew}" | grep -v "ntp clock-period"))
+        if [ -z "${different}" ]
         then
-            mv -f "${filenameNew}" "${configsDir}/${switchIP}-${date}.conf"
-        else
             rm -f "${filenameNew}"
+        else
+            mv -f "${filenameNew}" "${configsDir}/${switchIP}-${date}.conf"
         fi
     else
         mv -f "${filenameNew}" "${configsDir}/${switchIP}-${date}.conf"
