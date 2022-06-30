@@ -1,20 +1,21 @@
 get_configs is util for getting and saving configs from switches and routers different vendors (Cisco, D-link, Ericsson, Edgecore)
+This script automatically detect vendor and model of equipment
 
 Configs saving in config-auto dir by tftp protocol
 
-Configs remain if it is new
-
-The code uses the language 'expect'
+If the configurations have changed, then it is saved
 
 get_configs runnig for whole networks 172.18.0.0/24, 172.18.1.0/24 and 172.18.2.0/24. You can modify get_configs for your own networks. 
 
 USE IT AS-IS WITHOUT ANY WARRANTY
 
 1. Rename file secrets.example as secrets and edit it
-2. Setup any TFTP-server. It must be accessible from network hardware. In get_configs TFTP-server has IPs 172.18.0.1, 172.18.1.1, 172.18.2.1. You can modify this script for your own IPs and networks.
-3. Create a folder configs-auto and give write permissions to the user running the script on this folder
+2. Setup any TFTP-server. It must be accessible from network hardware. In 'get_configs' TFTP-server has IPs 172.18.0.1, 172.18.1.1, 172.18.2.1. You can modify this script for your own IPs and networks.
+3. Create a folder configs-auto in tftp-server path and give write permissions to the user running the script on this folder
 
 
 Usage:
 ./get_configs 
+
+For find any serios errors you cat use "cat *.log | grep '!!!'" in log folder
 
